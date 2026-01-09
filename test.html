@@ -1,15 +1,557 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test HTML</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big HTML Page Demo</title>
+  <style>
+    :root{
+      --bg: #0b1020;
+      --card: rgba(255,255,255,0.06);
+      --text: rgba(255,255,255,0.88);
+      --muted: rgba(255,255,255,0.60);
+      --border: rgba(255,255,255,0.12);
+      --accent: #7c3aed;
+      --accent2: #22c55e;
+      --shadow: 0 18px 60px rgba(0,0,0,0.45);
+    }
+    *{ box-sizing:border-box; margin:0; padding:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body{ background: radial-gradient(1200px 600px at 15% 0%, rgba(124,58,237,0.35), transparent 60%),
+                    radial-gradient(900px 500px at 90% 20%, rgba(34,197,94,0.18), transparent 55%),
+                    var(--bg);
+          color:var(--text); line-height:1.55; }
+    a{ color: inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
+    .container{ width:min(1200px, 92%); margin-inline:auto; }
+
+    /* NAV */
+    header{ position:sticky; top:0; z-index:50; background: rgba(11,16,32,0.75); backdrop-filter: blur(12px); border-bottom:1px solid var(--border); }
+    nav{ display:flex; align-items:center; justify-content:space-between; padding: 14px 0; gap:14px; }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:0.5px; }
+    .logo{
+      width:40px; height:40px; border-radius:12px;
+      background: conic-gradient(from 210deg, var(--accent), var(--accent2));
+      box-shadow: 0 12px 40px rgba(124,58,237,0.2);
+    }
+    .nav-links{ display:flex; gap:18px; align-items:center; }
+    .nav-links a{ color:var(--muted); padding:8px 10px; border-radius:10px; transition: 0.2s; }
+    .nav-links a:hover{ color:var(--text); background: rgba(255,255,255,0.06); }
+
+    .btn{ border:none; cursor:pointer; padding:10px 14px; border-radius:12px; font-weight:600; transition: 0.2s; }
+    .btn-primary{
+      background: linear-gradient(135deg, var(--accent), #9b5cff);
+      color:white;
+      box-shadow: 0 18px 40px rgba(124,58,237,0.25);
+    }
+    .btn-primary:hover{ transform: translateY(-1px); filter: brightness(1.05); }
+    .btn-outline{
+      background: transparent;
+      border:1px solid var(--border);
+      color: var(--text);
+    }
+    .btn-outline:hover{ background: rgba(255,255,255,0.06); }
+
+    /* HERO */
+    .hero{ padding: 70px 0 40px; display:grid; grid-template-columns: 1.2fr 0.8fr; gap:34px; align-items:center; }
+    .tag{ display:inline-flex; align-items:center; gap:8px; padding:7px 12px; border:1px solid var(--border);
+          background: rgba(255,255,255,0.05); border-radius:999px; color:var(--muted); font-size:14px; }
+    .tag strong{ color: var(--text); }
+    h1{ font-size: clamp(2.2rem, 2.6vw + 1rem, 3.6rem); line-height:1.1; margin-top: 14px; }
+    .sub{ color: var(--muted); margin-top: 12px; max-width: 60ch; font-size: 1.03rem; }
+    .hero-actions{ display:flex; gap:12px; margin-top: 22px; flex-wrap:wrap; }
+    .stats{ display:flex; gap:18px; margin-top: 26px; flex-wrap:wrap; }
+    .stat{ background: rgba(255,255,255,0.05); border:1px solid var(--border); border-radius:18px; padding:12px 14px; min-width: 170px; }
+    .stat p{ color:var(--muted); font-size: 13px; }
+    .stat b{ font-size: 18px; }
+
+    .hero-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      border:1px solid var(--border);
+      border-radius: 24px; padding: 18px; box-shadow: var(--shadow);
+      position: relative; overflow:hidden;
+    }
+    .hero-card::before{
+      content:""; position:absolute; inset:-80px; background: radial-gradient(circle, rgba(124,58,237,0.22), transparent 55%);
+      transform: rotate(20deg);
+    }
+    .hero-card > *{ position: relative; }
+    .mini-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; margin-top:12px; }
+    .mini{ border:1px solid var(--border); background: rgba(0,0,0,0.18); border-radius: 18px; padding: 12px; }
+    .mini h4{ font-size: 14px; margin-bottom:6px; }
+    .mini p{ color: var(--muted); font-size: 12.5px; }
+
+    /* SECTION */
+    section{ padding: 54px 0; }
+    .section-head{ display:flex; align-items:flex-end; justify-content:space-between; gap:14px; margin-bottom: 20px; }
+    .section-head h2{ font-size: 1.8rem; }
+    .section-head p{ color:var(--muted); max-width: 70ch; }
+
+    /* FEATURES */
+    .features{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .feature{
+      background: rgba(255,255,255,0.05); border:1px solid var(--border);
+      border-radius: 22px; padding: 16px; transition: 0.22s;
+    }
+    .feature:hover{ transform: translateY(-3px); background: rgba(255,255,255,0.07); }
+    .feature .icon{
+      width:44px; height:44px; border-radius:16px;
+      background: rgba(124,58,237,0.18); border:1px solid rgba(124,58,237,0.35);
+      display:grid; place-items:center; margin-bottom: 10px; font-size: 20px;
+    }
+    .feature p{ color:var(--muted); margin-top: 6px; }
+
+    /* PRICING */
+    .pricing{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .plan{
+      background: rgba(255,255,255,0.05); border:1px solid var(--border);
+      border-radius: 26px; padding: 18px; position: relative;
+    }
+    .plan.popular{ border: 1px solid rgba(124,58,237,0.55); box-shadow: 0 22px 80px rgba(124,58,237,0.18); }
+    .badge{
+      position:absolute; top:14px; right:14px;
+      padding:6px 10px; border-radius:999px;
+      background: rgba(124,58,237,0.25); border:1px solid rgba(124,58,237,0.5);
+      font-size: 12px;
+    }
+    .plan h3{ font-size: 18px; }
+    .price{ font-size: 34px; font-weight: 800; margin: 10px 0 6px; }
+    .plan p{ color: var(--muted); }
+    .list{ margin-top: 12px; display:grid; gap:8px; }
+    .list li{ list-style:none; display:flex; gap:10px; align-items:flex-start; color: var(--muted); }
+    .check{ color: var(--accent2); font-weight: 900; }
+    .plan .btn{ width: 100%; margin-top: 14px; }
+
+    /* TESTIMONIALS */
+    .testimonials{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .quote{
+      background: rgba(255,255,255,0.05); border:1px solid var(--border);
+      border-radius: 24px; padding: 16px;
+    }
+    .quote p{ color: var(--muted); }
+    .person{ display:flex; align-items:center; gap:10px; margin-top: 12px; }
+    .avatar{ width:42px; height:42px; border-radius: 14px; background: rgba(255,255,255,0.09); border:1px solid var(--border); }
+    .person b{ display:block; font-size: 14px; }
+    .person span{ color: var(--muted); font-size: 12px; }
+
+    /* FAQ */
+    .faq{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    details{
+      background: rgba(255,255,255,0.05); border:1px solid var(--border);
+      border-radius: 20px; padding: 14px;
+    }
+    summary{ cursor:pointer; font-weight: 700; }
+    details p{ color: var(--muted); margin-top: 8px; }
+
+    /* CONTACT */
+    .contact{
+      display:grid; grid-template-columns: 1fr 1fr; gap: 18px;
+      background: rgba(255,255,255,0.05); border:1px solid var(--border);
+      border-radius: 26px; padding: 20px;
+    }
+    form{ display:grid; gap:10px; }
+    input, textarea, select{
+      width:100%; padding: 12px 14px; border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,0.25);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{ min-height:120px; resize: vertical; }
+    .two{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    .contact-info{ padding: 6px 4px; }
+    .contact-info h3{ font-size: 18px; }
+    .info-card{
+      margin-top: 12px; display:grid; gap:10px;
+    }
+    .info{
+      background: rgba(0,0,0,0.22); border:1px solid var(--border);
+      border-radius: 20px; padding: 12px;
+    }
+    .info small{ color: var(--muted); display:block; margin-top: 4px; }
+
+    /* FOOTER */
+    footer{
+      padding: 30px 0 50px;
+      border-top: 1px solid var(--border);
+      background: rgba(0,0,0,0.1);
+    }
+    .footer-grid{ display:grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap:14px; }
+    .footer-grid h4{ margin-bottom: 10px; }
+    .footer-grid a{ color: var(--muted); display:block; padding: 4px 0; }
+    .footer-grid a:hover{ color: var(--text); }
+    .copyright{ color: var(--muted); margin-top: 14px; font-size: 13px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px){
+      .hero{ grid-template-columns: 1fr; }
+      .features, .pricing, .testimonials{ grid-template-columns: 1fr; }
+      .faq{ grid-template-columns: 1fr; }
+      .contact{ grid-template-columns: 1fr; }
+      .footer-grid{ grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
-    <p>2nd commit on main branch</p>
-    <p>3rd commit on main branch</p>
-    <p>✨ This line is from the feature branch</p>
-    <p>2nd commit on feature branch</p>
-    <p>3rd commit on feature branch</p>
+
+  <!-- HEADER / NAVBAR -->
+  <header>
+    <div class="container">
+      <nav>
+        <a class="brand" href="#top">
+          <div class="logo"></div>
+          <span>BigHTML</span>
+        </a>
+
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="#faq">FAQ</a>
+          <a href="#contact">Contact</a>
+        </div>
+
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button class="btn btn-outline">Login</button>
+          <button class="btn btn-primary">Get Started</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main id="top" class="container">
+    <section class="hero">
+      <div>
+        <span class="tag">🚀 <strong>New:</strong> Massive HTML template starter pack</span>
+        <h1>Build modern websites using one clean HTML file.</h1>
+        <p class="sub">
+          This page is intentionally big: it contains sections you see on real production sites.
+          Great for practicing HTML/CSS layout, responsive design, and component structure.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary">Start Building</button>
+          <button class="btn btn-outline">View Components</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <b>1200+</b>
+            <p>Lines of styled HTML</p>
+          </div>
+          <div class="stat">
+            <b>Mobile Ready</b>
+            <p>Responsive layouts</p>
+          </div>
+          <div class="stat">
+            <b>HTML-only FAQ</b>
+            <p>Uses &lt;details&gt;</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <h3 style="font-size:18px;">Mini Dashboard</h3>
+        <p style="color:var(--muted); margin-top:6px;">
+          This is a side panel card like modern SaaS websites.
+        </p>
+
+        <div class="mini-grid">
+          <div class="mini">
+            <h4>📈 Growth</h4>
+            <p>Track site performance and user engagement.</p>
+          </div>
+          <div class="mini">
+            <h4>🛡 Security</h4>
+            <p>Best practices included: structure + clarity.</p>
+          </div>
+          <div class="mini">
+            <h4>⚡ Speed</h4>
+            <p>Lightweight and fast: no external libraries.</p>
+          </div>
+          <div class="mini">
+            <h4>🎨 Design</h4>
+            <p>Modern gradients, spacing, and layout patterns.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:10px;">
+          <button class="btn btn-outline" style="flex:1;">Download</button>
+          <button class="btn btn-primary" style="flex:1;">Preview</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="section-head">
+        <div>
+          <h2>Features</h2>
+          <p>Everything you need to practice building a real website layout.</p>
+        </div>
+        <button class="btn btn-outline">See All</button>
+      </div>
+
+      <div class="features">
+        <article class="feature">
+          <div class="icon">🧱</div>
+          <h3>Component layout</h3>
+          <p>Hero, grids, cards, pricing tables, testimonial blocks, and footer.</p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">📱</div>
+          <h3>Responsive design</h3>
+          <p>Auto adapts for mobile screens using simple media queries.</p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">🧠</div>
+          <h3>Clean structure</h3>
+          <p>Sections are well separated and easy to modify / extend.</p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">🔍</div>
+          <h3>Semantic HTML</h3>
+          <p>Uses header, nav, main, section, footer and accessible components.</p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">🧩</div>
+          <h3>Reusable styling</h3>
+          <p>CSS variables and consistent spacing help keep code maintainable.</p>
+        </article>
+
+        <article class="feature">
+          <div class="icon">🗂</div>
+          <h3>FAQ with no JS</h3>
+          <p>&lt;details&gt; elements allow interactive toggling without JavaScript.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing">
+      <div class="section-head">
+        <div>
+          <h2>Pricing</h2>
+          <p>Fake pricing section for layout practice (classic SaaS format).</p>
+        </div>
+      </div>
+
+      <div class="pricing">
+        <article class="plan">
+          <h3>Starter</h3>
+          <div class="price">$0</div>
+          <p>Perfect for trying out the template.</p>
+          <ul class="list">
+            <li><span class="check">✓</span> Basic sections</li>
+            <li><span class="check">✓</span> Responsive layout</li>
+            <li><span class="check">✓</span> Clean HTML structure</li>
+            <li><span class="check">✓</span> Simple CSS variables</li>
+          </ul>
+          <button class="btn btn-outline">Choose Starter</button>
+        </article>
+
+        <article class="plan popular">
+          <span class="badge">MOST POPULAR</span>
+          <h3>Pro</h3>
+          <div class="price">$19</div>
+          <p>For serious UI building and practice.</p>
+          <ul class="list">
+            <li><span class="check">✓</span> Everything in Starter</li>
+            <li><span class="check">✓</span> More components</li>
+            <li><span class="check">✓</span> Better UI polish</li>
+            <li><span class="check">✓</span> Ideal for portfolio</li>
+          </ul>
+          <button class="btn btn-primary">Choose Pro</button>
+        </article>
+
+        <article class="plan">
+          <h3>Team</h3>
+          <div class="price">$49</div>
+          <p>For teams building UI together.</p>
+          <ul class="list">
+            <li><span class="check">✓</span> Everything in Pro</li>
+            <li><span class="check">✓</span> Shared UI standards</li>
+            <li><span class="check">✓</span> Advanced structure</li>
+            <li><span class="check">✓</span> More pages possible</li>
+          </ul>
+          <button class="btn btn-outline">Choose Team</button>
+        </article>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="section-head">
+        <div>
+          <h2>Testimonials</h2>
+          <p>Fake reviews — but perfect for practicing card layouts.</p>
+        </div>
+      </div>
+
+      <div class="testimonials">
+        <article class="quote">
+          <p>“This template helped me understand page structuring and responsive design much faster.”</p>
+          <div class="person">
+            <div class="avatar"></div>
+            <div>
+              <b>Aryan</b>
+              <span>Frontend Learner</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="quote">
+          <p>“Super clean layout. The CSS variables make styling changes extremely easy.”</p>
+          <div class="person">
+            <div class="avatar"></div>
+            <div>
+              <b>Riya</b>
+              <span>UI Designer</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="quote">
+          <p>“I used it for a portfolio mock page — got selected in internship shortlist.”</p>
+          <div class="person">
+            <div class="avatar"></div>
+            <div>
+              <b>Rahul</b>
+              <span>Student Developer</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+      <div class="section-head">
+        <div>
+          <h2>FAQ</h2>
+          <p>Accordion powered by HTML only using the &lt;details&gt; tag.</p>
+        </div>
+      </div>
+
+      <div class="faq">
+        <details open>
+          <summary>Is this real production HTML?</summary>
+          <p>It is production-style layout, but it’s mainly meant for learning and practice.</p>
+        </details>
+        <details>
+          <summary>Can I add JavaScript later?</summary>
+          <p>Yes. You can attach JS for modal, sliders, animations, or API calls.</p>
+        </details>
+        <details>
+          <summary>Does it work on mobile?</summary>
+          <p>Yes. The CSS has breakpoints that collapse grids into single-column layout.</p>
+        </details>
+        <details>
+          <summary>Can you make it even bigger?</summary>
+          <p>YES. I can generate: full blog page, login/signup, dashboard, tables, modals, etc.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="section-head">
+        <div>
+          <h2>Contact</h2>
+          <p>A clean contact section with form layout (great for practicing form styles).</p>
+        </div>
+      </div>
+
+      <div class="contact">
+        <form>
+          <div class="two">
+            <input type="text" placeholder="Full name" required />
+            <input type="email" placeholder="Email address" required />
+          </div>
+
+          <select required>
+            <option value="" disabled selected>Choose a topic</option>
+            <option>Website Template</option>
+            <option>Pricing</option>
+            <option>Collaboration</option>
+            <option>Other</option>
+          </select>
+
+          <textarea placeholder="Write your message here..." required></textarea>
+          <button class="btn btn-primary" type="submit">Send Message</button>
+        </form>
+
+        <div class="contact-info">
+          <h3>Need help building something?</h3>
+          <p style="color:var(--muted); margin-top:6px;">
+            If you want, I can generate even more HTML pages:
+            login forms, dashboards, admin UI, profile pages, settings, etc.
+          </p>
+
+          <div class="info-card">
+            <div class="info">
+              <b>📍 Location</b>
+              <small>India / Remote</small>
+            </div>
+            <div class="info">
+              <b>📧 Email</b>
+              <small>support@bightml.demo</small>
+            </div>
+            <div class="info">
+              <b>⏱ Response time</b>
+              <small>Usually within 24 hours</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="brand" style="margin-bottom:10px;">
+            <div class="logo"></div>
+            <span>BigHTML</span>
+          </div>
+          <p style="color:var(--muted); max-width: 45ch;">
+            A huge HTML template to learn front-end structure, UI sections, and modern design patterns.
+          </p>
+        </div>
+
+        <div>
+          <h4>Product</h4>
+          <a href="#features">Features</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#faq">FAQ</a>
+        </div>
+
+        <div>
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Contact</a>
+        </div>
+
+        <div>
+          <h4>Resources</h4>
+          <a href="#">Docs</a>
+          <a href="#">Community</a>
+          <a href="#">Support</a>
+        </div>
+      </div>
+
+      <div class="copyright">
+        © 2026 BigHTML. Built for learning. Modify freely.
+      </div>
+    </div>
+  </footer>
+
+</body>
 </html>
